@@ -231,8 +231,24 @@ namespace MusicPlayer
 
             }
 
+            e.Graphics.DrawLine(Pens.Red, currentpoint, 0, currentpoint, 326);
             base.OnPaint(e);
         }
+
+
+        //カーソルの位置を与える
+
+        public int currentpoint=0;
+      
+        public void setpoint(int berpos)
+        {
+            
+            if (berpos < 0) return;
+            currentpoint = berpos;
+            
+        }
+
+       
 
 
         #region Component Designer generated code

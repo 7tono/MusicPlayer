@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -39,6 +40,7 @@
             this.customWaveViewer1 = new MusicPlayer.CustomWaveViewer();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.button5 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -119,27 +121,31 @@
             // 
             // panel1
             // 
+            this.panel1.AllowDrop = true;
             this.panel1.AutoScroll = true;
             this.panel1.AutoSize = true;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.customWaveViewer1);
-            this.panel1.Location = new System.Drawing.Point(8, 14);
+            this.panel1.Location = new System.Drawing.Point(8, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1255, 335);
+            this.panel1.Size = new System.Drawing.Size(1255, 342);
             this.panel1.TabIndex = 7;
             // 
             // customWaveViewer1
             // 
+            this.customWaveViewer1.AllowDrop = true;
             this.customWaveViewer1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.customWaveViewer1.Location = new System.Drawing.Point(2, 6);
+            this.customWaveViewer1.Location = new System.Drawing.Point(2, 7);
             this.customWaveViewer1.Name = "customWaveViewer1";
             this.customWaveViewer1.PenColor = System.Drawing.Color.Black;
             this.customWaveViewer1.PenWidth = 1F;
             this.customWaveViewer1.SamplesPerPixel = 128;
-            this.customWaveViewer1.Size = new System.Drawing.Size(1246, 280);
+            this.customWaveViewer1.Size = new System.Drawing.Size(1246, 326);
             this.customWaveViewer1.StartPosition = ((long)(0));
             this.customWaveViewer1.TabIndex = 7;
             this.customWaveViewer1.WaveStream = null;
+            this.customWaveViewer1.DragDrop += new System.Windows.Forms.DragEventHandler(this.customWaveViewer1_DragDrop);
+            this.customWaveViewer1.DragEnter += new System.Windows.Forms.DragEventHandler(this.customWaveViewer1DragAndDrop_DragEnter);
             // 
             // trackBar2
             // 
@@ -162,6 +168,12 @@
             this.button5.Text = " ";
             this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -202,5 +214,6 @@
         private TrackBar trackBar2;
         private CustomWaveViewer customWaveViewer1;
         private Button button5;
+        private System.Windows.Forms.Timer timer1;
     }
 }
