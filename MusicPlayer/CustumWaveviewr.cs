@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using NAudio.Wave;
+using System.Diagnostics;
 
 namespace MusicPlayer
 {
@@ -13,6 +14,14 @@ namespace MusicPlayer
     /// </summary>
     public class CustomWaveViewer : System.Windows.Forms.UserControl
     {
+        public Form1 f1;
+       
+        public void setfm(Form1 f)
+        {
+            f1 = f;
+        }
+
+
 
         #region プロパティ
         public Color PenColor { get; set; }
@@ -40,21 +49,32 @@ namespace MusicPlayer
         #region Mouse
         private Point mousePos, startPos;
         private bool mouseDrag = false;
-
+       
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                startPos = e.Location;
-                mousePos = new Point(-1, 1);
-                mouseDrag = true;
-                DrawVerticalLine(e.X);
-            }
-            base.OnMouseDown(e);
+
+           
+
+                /****
+                if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                {
+                    startPos = e.Location;
+                    mousePos = new Point(-1, 1);
+                    mouseDrag = true;
+                    DrawVerticalLine(e.X);
+                }
+                **/
+                base.OnMouseDown(e);
         }
+
+
+        bool Scrollflg = false;
+
+
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            /***
             if (mouseDrag)
             {
                 DrawVerticalLine(e.X); // マウス位置にライン描画
@@ -63,11 +83,21 @@ namespace MusicPlayer
 
 
             }
+
+            ***/
+            
+
+
+            
             base.OnMouseMove(e);
+
+            ///////////マウスカーソルと赤線の位置を取得し、動かせるようにする。
         }
 
+        public bool stopf = false;
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            /***
             if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Left)
             {
                 mouseDrag = false;
@@ -78,14 +108,19 @@ namespace MusicPlayer
 
                 int leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
                 int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
+                /////ooo
                 Zoom(leftSample, rightSample);
-
+                //
 
             }
             else if (e.Button == MouseButtons.Middle)
             {
                 this.FitToScreen();
             }
+            
+
+            
+            ***/
             base.OnMouseUp(e);
         }
         #endregion
@@ -238,19 +273,18 @@ namespace MusicPlayer
 
         //カーソルの位置を与える
 
-        public int currentpoint=0;
+        public int currentpoint =0;
       
         public void setpoint(int berpos)
         {
-            
+
+           
             if (berpos < 0) return;
             currentpoint = berpos;
             
         }
 
        
-
-
         #region Component Designer generated code
         /// <summary> 
         /// Required method for Designer support - do not modify 
