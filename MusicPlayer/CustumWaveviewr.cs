@@ -55,15 +55,17 @@ namespace MusicPlayer
 
            
 
-                /****
-                if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                
+                if (e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
                     startPos = e.Location;
                     mousePos = new Point(-1, 1);
                     mouseDrag = true;
                     DrawVerticalLine(e.X);
+
+
                 }
-                **/
+                
                 base.OnMouseDown(e);
         }
 
@@ -97,8 +99,8 @@ namespace MusicPlayer
         public bool stopf = false;
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            /***
-            if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Left)
+            
+            if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 mouseDrag = false;
                 DrawVerticalLine(startPos.X);
@@ -120,7 +122,7 @@ namespace MusicPlayer
             
 
             
-            ***/
+            
             base.OnMouseUp(e);
         }
         #endregion
@@ -146,9 +148,9 @@ namespace MusicPlayer
         /// </summary>
         private System.ComponentModel.Container components = null;
         private WaveStream waveStream;
-        private int samplesPerPixel = 128;
+        public int samplesPerPixel = 128;
         private long startPosition;
-        private int bytesPerSample;
+        public int bytesPerSample;
         /// <summary>
         /// Creates a new WaveViewer control
         /// </summary>

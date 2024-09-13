@@ -66,6 +66,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(948, 360);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(264, 118);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
@@ -134,13 +135,12 @@
             this.customWaveViewer1.DragDrop += new System.Windows.Forms.DragEventHandler(this.customWaveViewer1_DragDrop);
             this.customWaveViewer1.DragEnter += new System.Windows.Forms.DragEventHandler(this.customWaveViewer1DragAndDrop_DragEnter);
             this.customWaveViewer1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.customWaveViewer1_MouseDown);
-            this.customWaveViewer1.MouseHover += new System.EventHandler(this.customWaveViewer1_MouseHover);
             this.customWaveViewer1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.customWaveViewer1_MouseMove);
             this.customWaveViewer1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.customWaveViewer1_MouseUp);
             // 
             // trackBar2
             // 
-            this.trackBar2.Location = new System.Drawing.Point(12, 364);
+            this.trackBar2.Location = new System.Drawing.Point(12, 366);
             this.trackBar2.Maximum = 100;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(930, 45);
