@@ -68,7 +68,7 @@ namespace MusicPlayer
                 mx = 0;
 
             }
-            
+
         }
 
         string filePath_replay;
@@ -250,6 +250,16 @@ namespace MusicPlayer
             if (customWaveViewer1.WaveStream != null)
             {
 
+
+                if (afr == null)
+                {
+                    trackBar2.Value = 0;
+                    if (afr == null) return;
+                }
+
+
+
+
                 musiclng = afr.Length;//長さ
 
                 musiclng /= 100;//長さを１００で割り１％の値をとる
@@ -262,7 +272,11 @@ namespace MusicPlayer
                 customWaveViewer1.setpoint((int)currentSec.X - slideoffset);
                 customWaveViewer1.Refresh();
             }
-
+            else
+            {
+                trackBar2.Value = 0;
+                if (afr == null) return;
+            }
         }
 
         private void StopButton_Click(object sender, EventArgs e)
@@ -375,14 +389,58 @@ namespace MusicPlayer
             }
         }
 
+        double ttlomg = 0;
+        double ttn = 0;
+
+        Point tts;
+        Point tte;
+
+        private void calcsec2pos(int TotalTime_sec, double currentSec1)
+        {
+            tts = customWaveViewer1.startPos;
+            tte = customWaveViewer1.endPos;
+
+
+
+
+            double currentratio = TotalTime_sec / currentSec1; //今の位置への倍率 = 　曲全体の時間/　今何秒目
+            double currentratiozoom;
+            if (tte.X != 0)  /////sssss
+            {/*
+                ttm = tte.X - tts.X;     //Zoom後の全体範囲（ttm）＝　マウス＿エンド位置（tts.X）-マウス＿スタート位置（tte.X）
+                ttn = (currentPos - tts.X) / ttm;   //今いる位置（％）＝（今の位置　-　マウス＿スタート位置）/　Zoom後の全体範囲
+            */
+                //ttm = tte.X - tts.X;     //Zoom後の全体範囲（ttm）＝　マウス＿エンド位置（tts.X）-マウス＿スタート位置（tte.X）
+                // Weaveview_pos = ttm / (currentratio - tts.X);   //今いる位置（％）＝Zoom後の全体範囲 /（今の位置　-　マウス＿スタート位置）
+
+
+                ttn = 1200 / currentratio; // 現在の位置ドット
+                ttn = ttn - tts.X; //ズーム後の画面の位置
+                ttlomg = tte.X - tts.X;　//ズームの範囲
+
+                currentratiozoom = ttlomg / ttn; //ズーム後の画面のバーがいる位置の割合
+                Weaveview_pos = 1200 / currentratiozoom;　// 全体のバーがいるべき場所
+                Debug.WriteLine("now→" + (int)Weaveview_pos);
+            }
+            else
+            {
+                Weaveview_pos = customWaveViewer1.Width / (TotalTime_sec / currentSec1); // もともとのコード
+                Debug.WriteLine("now→" + (int)Weaveview_pos);
+            }
+
+
+        }
+
+
+
+
+
 
 
         double Weaveview_pos;
         dPoint dp = new dPoint();
         private void timer1_Tick(object sender, EventArgs e)
         {
-
-
             int TotalHours0 = afr.TotalTime.Hours * 3600;
             int TotalMinutes0 = afr.TotalTime.Minutes * 60;
             int TotalSeconds0 = afr.TotalTime.Seconds;
@@ -390,22 +448,60 @@ namespace MusicPlayer
 
 
             double currentSec1 = afr.CurrentTime.TotalSeconds;//再生したトータル秒
-            //double currentSec1  = (double)outputDevice.GetPosition() / afr.WaveFormat.AverageBytesPerSecond;//再生したトータル秒
+            
 
             currentSec.X = (int)Weaveview_pos;
 
             dp.X = (int)currentSec1;
 
 
-            //ドット　　　　　　　　　　　今の位置(バイト)　　　　　　　　　　　１秒あたりのバイト数
-            Weaveview_pos = customWaveViewer1.Width / (TotalTime_sec / currentSec1);
+         
+            calcsec2pos(TotalTime_sec, currentSec1);
 
+           
+            Debug.WriteLine("⇒" + (int)Weaveview_pos);
 
-            //Weaveviwの横幅は？　上を使ってどの位置に縦線書くとよい？
+           
             customWaveViewer1.setpoint((int)Weaveview_pos - slideoffset);
             customWaveViewer1.Refresh();
 
-            Debug.WriteLine("→" + (int)Weaveview_pos);
+            if (customWaveViewer1.zoomflg) // 
+            {
+                if (Weaveview_pos >= 1200)
+                {
+                    // Weaveview_pos = 0;
+                    // 書き始めにttlomg（zoom後の画面の範囲）を足す。
+                    /*
+                    customWaveViewer1.setpoint((int)((int)Weaveview_pos - slideoffset + ttlomg));
+                    customWaveViewer1.Refresh();
+                    */
+
+
+
+
+                    //////sssssss ttsとtteではなく　customWaveViewer1.startPos　を変える。なぜならcalcsec2posで書き直しているから。
+                    tts.X = (int)(tts.X + ttlomg);
+                    tte.X = (int)(tte.X + ttlomg);
+                    /*
+                    int leftSample  = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
+                    int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
+                    */
+                    int bytesPerSample = customWaveViewer1.bytesPerSample;
+                    int SamplesPerPixel = customWaveViewer1.SamplesPerPixel;
+
+                    int StartPosition = (int)customWaveViewer1.StartPosition;
+
+                    int leftSample  = StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(tts.X, tte.X);
+                    int rightSample = StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(tts.X, tte.X);
+
+
+
+                    customWaveViewer1.Zoom(leftSample, rightSample);
+                    customWaveViewer1.setpoint(0);
+                    Weaveview_pos  = 0;
+                    customWaveViewer1.Refresh();
+                }
+            }
         }
 
 
@@ -414,9 +510,12 @@ namespace MusicPlayer
         int mx = 0;
         //int Rberpos =0;
         double mouse_persent;
-        double viewp;
+        long viewp;
         private void customWaveViewer1_MouseUp(object sender, MouseEventArgs e)
         {
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Right) return;
+
 
             if (mouseDrag == true)
             {
@@ -426,7 +525,7 @@ namespace MusicPlayer
 
             mouseDrag = false;
 
-           
+
             if (e.X < 0) mx = 0;
 
             if (customWaveViewer1.WaveStream != null && afr != null)
@@ -434,18 +533,16 @@ namespace MusicPlayer
 
 
 
-                double onep = 1200 / 100;
-                mouse_persent = mx / onep;
-                viewp = afr.Length * mouse_persent;
-                viewp = viewp / 100;
-                int Rberpos = (int)viewp;
-
+                double onep = 1200 / 100; //Wiew画面の１％の長さ
+                mouse_persent = mx / onep;//マウスは何パーセントの位置にいる？
+                viewp = (long)afr.Length * (long)mouse_persent;//パーセントを掛ける
+                viewp = viewp / 100;//パーセントでの位置に直す
 
 
                 currentSec.X = mx;
 
-                Debug.WriteLine("→→→→" + Rberpos);
-                afr.Position = Rberpos;
+                Debug.WriteLine("→→→→" + viewp);
+                afr.Position = viewp;
 
 
 
@@ -524,6 +621,18 @@ namespace MusicPlayer
 
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
 
+        {
+            if (e.KeyData == Keys.Space)
+            {
+
+                PlayPauseButton_Click(sender, e);
+                ActiveControl = null;
+                return;
+
+
+            }
+        }
     }
 }

@@ -168,7 +168,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1228, 486);
+            this.ClientSize = new System.Drawing.Size(1228, 488);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.panel1);
@@ -177,9 +177,11 @@
             this.Controls.Add(this.PlayPauseButton);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button1);
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel1.ResumeLayout(false);

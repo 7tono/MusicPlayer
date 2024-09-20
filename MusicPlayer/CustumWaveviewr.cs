@@ -38,24 +38,22 @@ namespace MusicPlayer
             this.SamplesPerPixel = samples / this.Width;
         }
 
+        public bool zoomflg = false;
 
         public void Zoom(int leftSample, int rightSample)
         {
             this.startPosition = leftSample * bytesPerSample; // [byte]
             this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
-
+            zoomflg = true;
         }
 
         #region Mouse
-        private Point mousePos, startPos;
+        public Point mousePos, startPos;
         private bool mouseDrag = false;
        
         protected override void OnMouseDown(MouseEventArgs e)
         {
-
-           
-
-                
+     
                 if (e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
                     startPos = e.Location;
@@ -76,7 +74,7 @@ namespace MusicPlayer
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            /***
+            
             if (mouseDrag)
             {
                 DrawVerticalLine(e.X); // マウス位置にライン描画
@@ -86,7 +84,7 @@ namespace MusicPlayer
 
             }
 
-            ***/
+            
             
 
 
@@ -97,32 +95,46 @@ namespace MusicPlayer
         }
 
         public bool stopf = false;
+        public Point  endPos;
+        public double calcsec2pos;
+        double MoveDistance;
+        double Mgn;
+        double antMgn = 1;
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             
+
             if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Right)
             {
+                endPos = e.Location;////oooooo
+
+
                 mouseDrag = false;
                 DrawVerticalLine(startPos.X);
 
                 if (mousePos.X == -1) return;
                 DrawVerticalLine(mousePos.X);
 
-                int leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
+                int leftSample  = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
                 int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
                 /////ooo
                 Zoom(leftSample, rightSample);
                 //
+
+                MoveDistance = (double) (endPos.X - startPos.X);  // マウスの移動距離　= マウスアップした位置 - マウスダウンした位置
+                Mgn = 1200 / MoveDistance;　　           　　　　 //拡大倍率　= 1200(WaveViewerの横幅) / マウスの移動距離
+                antMgn = MoveDistance / 1200;
 
             }
             else if (e.Button == MouseButtons.Middle)
             {
                 this.FitToScreen();
             }
-            
 
-            
-            
+           
+
+
             base.OnMouseUp(e);
         }
         #endregion
@@ -281,7 +293,7 @@ namespace MusicPlayer
         {
 
            
-            if (berpos < 0) return;
+            if (berpos < 0) berpos=-1;
             currentpoint = berpos;
             
         }
