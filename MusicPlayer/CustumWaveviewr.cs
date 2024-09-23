@@ -39,12 +39,15 @@ namespace MusicPlayer
         }
 
         public bool zoomflg = false;
-
+        public int sabun;
+        public int rightSample_old;
         public void Zoom(int leftSample, int rightSample)
         {
             this.startPosition = leftSample * bytesPerSample; // [byte]
             this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
             zoomflg = true;
+            sabun = rightSample - leftSample;
+            rightSample_old = rightSample;
         }
 
         #region Mouse

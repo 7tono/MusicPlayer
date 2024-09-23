@@ -397,7 +397,8 @@ namespace MusicPlayer
 
         private void calcsec2pos(int TotalTime_sec, double currentSec1)
         {
-            tts = customWaveViewer1.startPos;
+            /// 9/23 複数回Zoom後の挙動
+            tts = customWaveViewer1.startPos;　　
             tte = customWaveViewer1.endPos;
 
 
@@ -439,6 +440,7 @@ namespace MusicPlayer
 
         double Weaveview_pos;
         dPoint dp = new dPoint();
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             int TotalHours0 = afr.TotalTime.Hours * 3600;
@@ -448,20 +450,20 @@ namespace MusicPlayer
 
 
             double currentSec1 = afr.CurrentTime.TotalSeconds;//再生したトータル秒
-            
+
 
             currentSec.X = (int)Weaveview_pos;
 
             dp.X = (int)currentSec1;
 
 
-         
+
             calcsec2pos(TotalTime_sec, currentSec1);
 
-           
+
             Debug.WriteLine("⇒" + (int)Weaveview_pos);
 
-           
+
             customWaveViewer1.setpoint((int)Weaveview_pos - slideoffset);
             customWaveViewer1.Refresh();
 
@@ -469,36 +471,25 @@ namespace MusicPlayer
             {
                 if (Weaveview_pos >= 1200)
                 {
-                    // Weaveview_pos = 0;
+                    
                     // 書き始めにttlomg（zoom後の画面の範囲）を足す。
-                    /*
-                    customWaveViewer1.setpoint((int)((int)Weaveview_pos - slideoffset + ttlomg));
-                    customWaveViewer1.Refresh();
-                    */
 
 
 
-
-                    //////sssssss ttsとtteではなく　customWaveViewer1.startPos　を変える。なぜならcalcsec2posで書き直しているから。
-                    tts.X = (int)(tts.X + ttlomg);
-                    tte.X = (int)(tte.X + ttlomg);
-                    /*
-                    int leftSample  = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
-                    int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
-                    */
-                    int bytesPerSample = customWaveViewer1.bytesPerSample;
-                    int SamplesPerPixel = customWaveViewer1.SamplesPerPixel;
-
-                    int StartPosition = (int)customWaveViewer1.StartPosition;
-
-                    int leftSample  = StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(tts.X, tte.X);
-                    int rightSample = StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(tts.X, tte.X);
+                    customWaveViewer1.startPos.X = (int)(customWaveViewer1.startPos.X + ttlomg);
+                    customWaveViewer1.endPos.X = (int)(customWaveViewer1.endPos.X + ttlomg);
+                    customWaveViewer1.mousePos.X = (int)(customWaveViewer1.mousePos.X + ttlomg);
 
 
-
+                    
+                   
+                    Weaveview_pos = 0;
+                    int leftSample = customWaveViewer1.rightSample_old;
+                    int rightSample = customWaveViewer1.rightSample_old+ customWaveViewer1.sabun;
+                   
                     customWaveViewer1.Zoom(leftSample, rightSample);
                     customWaveViewer1.setpoint(0);
-                    Weaveview_pos  = 0;
+                    Weaveview_pos = 0;
                     customWaveViewer1.Refresh();
                 }
             }
