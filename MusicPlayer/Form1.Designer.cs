@@ -200,7 +200,7 @@
         private Button button4;
         private TrackBar trackBar1;
         private Panel panel1;
-        private TrackBar trackBar2;
+        public  TrackBar trackBar2;
         private CustomWaveViewer customWaveViewer1;
         private Button StopButton;
         private System.Windows.Forms.Timer timer1;

@@ -41,13 +41,36 @@ namespace MusicPlayer
         public bool zoomflg = false;
         public int sabun;
         public int rightSample_old;
+
+
+
+
+
+
+
+
         public void Zoom(int leftSample, int rightSample)
         {
-            this.startPosition = leftSample * bytesPerSample; // [byte]
-            this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
-            zoomflg = true;
-            sabun = rightSample - leftSample;
-            rightSample_old = rightSample;
+            if (zoomflg)
+            {
+                this.FitToScreen();
+                zoomflg = false;
+            }
+            else
+            {
+                this.startPosition = leftSample * bytesPerSample; // [byte]
+                this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
+                zoomflg = true;
+                sabun = rightSample - leftSample;
+                rightSample_old = rightSample;
+            }
+
+            double Musicracio =  1200/ startPos.X;
+            double trackracio = 100/ Musicracio;
+            Form1 ff = (Form1)(this.TopLevelControl);
+            ff.trackBar2.Value = (int)trackracio;
+           
+            ///9/24 ZooméûÇÃtrackberÇÃí≤êÆÅB
         }
 
         #region Mouse
@@ -98,6 +121,7 @@ namespace MusicPlayer
         }
 
         public bool stopf = false;
+        //public bool zoomflg = false;
         public Point  endPos;
         public double calcsec2pos;
         double MoveDistance;

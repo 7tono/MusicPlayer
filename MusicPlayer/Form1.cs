@@ -243,20 +243,25 @@ namespace MusicPlayer
         }
         long musiclng = 0;
 
-
+        bool sclolflg = false;
         int slideoffset = 0;
-        private void hScrollBar1_ValueChanged(object sender, EventArgs e)
+        public void hScrollBar1_ValueChanged(object sender, EventArgs e)
         {
             if (customWaveViewer1.WaveStream != null)
             {
 
+                /*
+                if (sclolflg)
+                {
+
+                }*/
 
                 if (afr == null)
                 {
-                    trackBar2.Value = 0;
+                    //trackBar2.Value = 0;
                     if (afr == null) return;
                 }
-
+                
 
 
 
@@ -296,7 +301,7 @@ namespace MusicPlayer
 
 
             if (Playflg == true) PlayPauseButton_Click(sender, e);
-
+            trackBar2.Value = 0;
         }
 
 
@@ -389,8 +394,9 @@ namespace MusicPlayer
             }
         }
 
-        double ttlomg = 0;
+        double ttlong = 1200;
         double ttn = 0;
+         
 
         Point tts;
         Point tte;
@@ -417,9 +423,9 @@ namespace MusicPlayer
 
                 ttn = 1200 / currentratio; // 現在の位置ドット
                 ttn = ttn - tts.X; //ズーム後の画面の位置
-                ttlomg = tte.X - tts.X;　//ズームの範囲
+                ttlong = tte.X - tts.X;　//ズームの範囲
 
-                currentratiozoom = ttlomg / ttn; //ズーム後の画面のバーがいる位置の割合
+                currentratiozoom = ttlong / ttn; //ズーム後の画面のバーがいる位置の割合
                 Weaveview_pos = 1200 / currentratiozoom;　// 全体のバーがいるべき場所
                 Debug.WriteLine("now→" + (int)Weaveview_pos);
             }
@@ -472,17 +478,16 @@ namespace MusicPlayer
                 if (Weaveview_pos >= 1200)
                 {
                     
-                    // 書き始めにttlomg（zoom後の画面の範囲）を足す。
+                    // 書き始めにttlong（zoom後の画面の範囲）を足す。
 
 
 
-                    customWaveViewer1.startPos.X = (int)(customWaveViewer1.startPos.X + ttlomg);
-                    customWaveViewer1.endPos.X = (int)(customWaveViewer1.endPos.X + ttlomg);
-                    customWaveViewer1.mousePos.X = (int)(customWaveViewer1.mousePos.X + ttlomg);
+                    customWaveViewer1.startPos.X = (int)(customWaveViewer1.startPos.X + ttlong);
+                    customWaveViewer1.endPos.X = (int)(customWaveViewer1.endPos.X + ttlong);
+                    customWaveViewer1.mousePos.X = (int)(customWaveViewer1.mousePos.X + ttlong);
 
 
-                    
-                   
+                  
                     Weaveview_pos = 0;
                     int leftSample = customWaveViewer1.rightSample_old;
                     int rightSample = customWaveViewer1.rightSample_old+ customWaveViewer1.sabun;
@@ -538,6 +543,7 @@ namespace MusicPlayer
 
 
                 customWaveViewer1.setpoint((int)mx - slideoffset);
+                //trackBar2.Value = customWaveViewer1.rightSample_old;
                 customWaveViewer1.Refresh();
 
 
@@ -625,5 +631,7 @@ namespace MusicPlayer
 
             }
         }
+
+       
     }
 }
