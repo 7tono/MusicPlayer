@@ -15,7 +15,7 @@ namespace MusicPlayer
     public class CustomWaveViewer : System.Windows.Forms.UserControl
     {
         public Form1 f1;
-       
+
         public void setfm(Form1 f)
         {
             f1 = f;
@@ -51,46 +51,53 @@ namespace MusicPlayer
 
         public void Zoom(int leftSample, int rightSample)
         {
-            if (zoomflg)
+            double SX = startPos.X;
+            double Musicracio = 1200 / SX;
+            double trackracio = 100 / Musicracio;
+            Form1 ff = (Form1)(this.TopLevelControl);
+
+            if (zoomflg) //Zoomの解除
             {
                 this.FitToScreen();
                 zoomflg = false;
+                ff.trackBar2.Value =0;
+               // ff.currentratio = 1;
+
             }
-            else
+            else　//Zoom
             {
                 this.startPosition = leftSample * bytesPerSample; // [byte]
                 this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
                 zoomflg = true;
                 sabun = rightSample - leftSample;
                 rightSample_old = rightSample;
+                ff.trackBar2.Value = (int)trackracio;
+                
             }
 
-            double Musicracio =  1200/ startPos.X;
-            double trackracio = 100/ Musicracio;
-            Form1 ff = (Form1)(this.TopLevelControl);
-            ff.trackBar2.Value = (int)trackracio;
            
-            ///9/24 Zoom時のtrackberの調整。
+           
+
         }
 
         #region Mouse
         public Point mousePos, startPos;
         private bool mouseDrag = false;
-       
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
-     
-                if (e.Button == System.Windows.Forms.MouseButtons.Right)
-                {
-                    startPos = e.Location;
-                    mousePos = new Point(-1, 1);
-                    mouseDrag = true;
-                    DrawVerticalLine(e.X);
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                startPos = e.Location;
+                mousePos = new Point(-1, 1);
+                mouseDrag = true;
+                DrawVerticalLine(e.X);
 
 
-                }
-                
-                base.OnMouseDown(e);
+            }
+
+            base.OnMouseDown(e);
         }
 
 
@@ -100,7 +107,7 @@ namespace MusicPlayer
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            
+
             if (mouseDrag)
             {
                 DrawVerticalLine(e.X); // マウス位置にライン描画
@@ -110,11 +117,11 @@ namespace MusicPlayer
 
             }
 
-            
-            
 
 
-            
+
+
+
             base.OnMouseMove(e);
 
             ///////////マウスカーソルと赤線の位置を取得し、動かせるようにする。
@@ -122,7 +129,7 @@ namespace MusicPlayer
 
         public bool stopf = false;
         //public bool zoomflg = false;
-        public Point  endPos;
+        public Point endPos;
         public double calcsec2pos;
         double MoveDistance;
         double Mgn;
@@ -130,7 +137,7 @@ namespace MusicPlayer
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            
+
 
             if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Right)
             {
@@ -143,13 +150,13 @@ namespace MusicPlayer
                 if (mousePos.X == -1) return;
                 DrawVerticalLine(mousePos.X);
 
-                int leftSample  = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
+                int leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
                 int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
                 /////ooo
                 Zoom(leftSample, rightSample);
                 //
 
-                MoveDistance = (double) (endPos.X - startPos.X);  // マウスの移動距離　= マウスアップした位置 - マウスダウンした位置
+                MoveDistance = (double)(endPos.X - startPos.X);  // マウスの移動距離　= マウスアップした位置 - マウスダウンした位置
                 Mgn = 1200 / MoveDistance;　　           　　　　 //拡大倍率　= 1200(WaveViewerの横幅) / マウスの移動距離
                 antMgn = MoveDistance / 1200;
 
@@ -159,7 +166,7 @@ namespace MusicPlayer
                 this.FitToScreen();
             }
 
-           
+
 
 
             base.OnMouseUp(e);
@@ -314,18 +321,18 @@ namespace MusicPlayer
 
         //カーソルの位置を与える
 
-        public int currentpoint =0;
-      
+        public int currentpoint = 0;
+
         public void setpoint(int berpos)
         {
 
-           
-            if (berpos < 0) berpos=-1;
+
+            if (berpos < 0) berpos = -1;
             currentpoint = berpos;
-            
+
         }
 
-       
+
         #region Component Designer generated code
         /// <summary> 
         /// Required method for Designer support - do not modify 

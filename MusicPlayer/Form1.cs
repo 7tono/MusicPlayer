@@ -261,7 +261,7 @@ namespace MusicPlayer
                     //trackBar2.Value = 0;
                     if (afr == null) return;
                 }
-                
+
 
 
 
@@ -302,6 +302,9 @@ namespace MusicPlayer
 
             if (Playflg == true) PlayPauseButton_Click(sender, e);
             trackBar2.Value = 0;
+            Weaveview_pos = 0;
+            customWaveViewer1.startPos.X = 0;
+            customWaveViewer1.endPos.X = 0;
         }
 
 
@@ -396,18 +399,27 @@ namespace MusicPlayer
 
         double ttlong = 1200;
         double ttn = 0;
-         
+
 
         Point tts;
         Point tte;
 
         private void calcsec2pos(int TotalTime_sec, double currentSec1)
         {
-            /// 9/23 複数回Zoom後の挙動
-            tts = customWaveViewer1.startPos;　　
-            tte = customWaveViewer1.endPos;
 
 
+            if (customWaveViewer1.startPos.X < customWaveViewer1.endPos.X)
+            {
+                tts = customWaveViewer1.startPos;
+                tte = customWaveViewer1.endPos;
+            }
+            else
+            {
+                tte = customWaveViewer1.startPos;
+                tts = customWaveViewer1.endPos;
+            }
+
+            ///9/25 Zoom解除後の赤線を制御するためにttsとtteを変える必要がある？
 
 
             double currentratio = TotalTime_sec / currentSec1; //今の位置への倍率 = 　曲全体の時間/　今何秒目
@@ -444,7 +456,7 @@ namespace MusicPlayer
 
 
 
-        double Weaveview_pos;
+        public double Weaveview_pos;
         dPoint dp = new dPoint();
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -477,7 +489,7 @@ namespace MusicPlayer
             {
                 if (Weaveview_pos >= 1200)
                 {
-                    
+
                     // 書き始めにttlong（zoom後の画面の範囲）を足す。
 
 
@@ -487,11 +499,11 @@ namespace MusicPlayer
                     customWaveViewer1.mousePos.X = (int)(customWaveViewer1.mousePos.X + ttlong);
 
 
-                  
+
                     Weaveview_pos = 0;
                     int leftSample = customWaveViewer1.rightSample_old;
-                    int rightSample = customWaveViewer1.rightSample_old+ customWaveViewer1.sabun;
-                   
+                    int rightSample = customWaveViewer1.rightSample_old + customWaveViewer1.sabun;
+
                     customWaveViewer1.Zoom(leftSample, rightSample);
                     customWaveViewer1.setpoint(0);
                     Weaveview_pos = 0;
@@ -632,6 +644,6 @@ namespace MusicPlayer
             }
         }
 
-       
+
     }
 }
