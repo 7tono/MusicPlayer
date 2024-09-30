@@ -51,29 +51,44 @@ namespace MusicPlayer
 
         public void Zoom(int leftSample, int rightSample)
         {
-            double SX = startPos.X;
-            double Musicracio = 1200 / SX;
-            double trackracio = 100 / Musicracio;
             Form1 ff = (Form1)(this.TopLevelControl);
 
-            if (zoomflg) //Zoomの解除
+            if (ff.roopflg == false)
             {
-                this.FitToScreen();
-                zoomflg = false;
-                ff.trackBar2.Value =0;
-               // ff.currentratio = 1;
+                double SX = startPos.X;
+                double Musicracio = 1200 / SX;
+                double trackracio = 100  / Musicracio;
+                
+
+                if (zoomflg) //Zoomの解除
+                {
+                    this.FitToScreen();
+                    zoomflg = false;
+                    ff.trackBar2.Value = 0;
+                    //ff.tts.X = 1;
+                    //ff.tte.X = 1;
+
+                    startPos.X = 0;
+                    endPos.X = 0;
+                }
+                else //Zoom
+                {
+                    this.startPosition = leftSample * bytesPerSample; // [byte]
+                    this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
+                    zoomflg = true;
+                    sabun = rightSample - leftSample;
+                    rightSample_old = rightSample;
+                    ff.trackBar2.Value = (int)trackracio;
+
+                }
+            }
+            else
+            {
+                Refresh();
+
 
             }
-            else　//Zoom
-            {
-                this.startPosition = leftSample * bytesPerSample; // [byte]
-                this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
-                zoomflg = true;
-                sabun = rightSample - leftSample;
-                rightSample_old = rightSample;
-                ff.trackBar2.Value = (int)trackracio;
-                
-            }
+            
 
            
            
@@ -314,7 +329,16 @@ namespace MusicPlayer
 
             }
 
+            
             e.Graphics.DrawLine(Pens.Red, currentpoint, 0, currentpoint, 326);
+
+            Form1 ff = (Form1)(this.TopLevelControl);
+
+            if (ff.roopflg)  //フラグの宣言はForm1で行う。　ZoomとLoopを切り替える方式をやめる　９/30
+            {
+                e.Graphics.DrawLine(Pens.Blue, currentpoint + 188, 0, currentpoint + 188, 326);
+            }
+            
             base.OnPaint(e);
         }
 

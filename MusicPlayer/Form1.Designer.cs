@@ -40,10 +40,13 @@
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.StopButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -99,7 +102,7 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(344, 422);
+            this.trackBar1.Location = new System.Drawing.Point(344, 405);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(201, 45);
@@ -123,7 +126,7 @@
             // 
             this.customWaveViewer1.AllowDrop = true;
             this.customWaveViewer1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.customWaveViewer1.Location = new System.Drawing.Point(2, 7);
+            this.customWaveViewer1.Location = new System.Drawing.Point(3, -2);
             this.customWaveViewer1.Name = "customWaveViewer1";
             this.customWaveViewer1.PenColor = System.Drawing.Color.Black;
             this.customWaveViewer1.PenWidth = 1F;
@@ -164,11 +167,33 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImage = global::MusicPlayer.Properties.Resources.OFF;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox1.Location = new System.Drawing.Point(357, 456);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 30);
+            this.pictureBox1.TabIndex = 10;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(369, 438);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(79, 15);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Zoom Moode";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1228, 488);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.panel1);
@@ -186,6 +211,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,5 +230,7 @@
         private CustomWaveViewer customWaveViewer1;
         private Button StopButton;
         private System.Windows.Forms.Timer timer1;
+        private PictureBox pictureBox1;
+        private Label label1;
     }
 }

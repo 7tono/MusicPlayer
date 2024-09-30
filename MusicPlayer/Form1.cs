@@ -3,6 +3,7 @@ using NAudio.Wave;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection.Emit;
 using System.Reflection.PortableExecutable;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
@@ -154,7 +155,8 @@ namespace MusicPlayer
             outputDevice.Init(afr);
 
             customWaveViewer1.WaveStream = new WaveFileReader(musicstr);
-
+            customWaveViewer1.FitToScreen();
+            trackBar2.Value = 0;
             customWaveViewer1.Refresh();
         }
 
@@ -324,13 +326,28 @@ namespace MusicPlayer
             string musicstr;
             try
             {
-                musicstr = dataGridView1.Rows[i].Cells[3].Value.ToString(); //ここのエラーは対策済み
+                musicstr = dataGridView1.Rows[i].Cells[2].Value.ToString(); //ここのエラーは対策済み
+                PlayPauseButton_Click(sender, e);
             }
             catch
             {
                 return;
             }
 
+
+            /*
+            if(customWaveViewer1.zoomflg)
+            {
+                customWaveViewer1.Zoom(1, 1200);
+            }
+            else
+            {
+                customWaveViewer1.Zoom(1, 1200);
+                customWaveViewer1.Zoom(1, 1200);
+            }
+            */
+
+            
 
             Restart(musicstr);
 
@@ -401,8 +418,8 @@ namespace MusicPlayer
         double ttn = 0;
 
 
-        Point tts;
-        Point tte;
+        public Point tts;
+        public Point tte;
 
         private void calcsec2pos(int TotalTime_sec, double currentSec1)
         {
@@ -644,6 +661,23 @@ namespace MusicPlayer
             }
         }
 
+        public bool roopflg = false;
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            
 
+            if(roopflg)
+            {
+                pictureBox1.BackgroundImage= System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\OFF.png");
+                label1.Text = "Zoom Moode";
+                roopflg = false;
+            }
+            else
+            {
+                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\ON.png");
+                label1.Text = "Loop Moode";
+                roopflg = true;
+            }
+        }
     }
 }
