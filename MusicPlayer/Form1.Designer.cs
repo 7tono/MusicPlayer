@@ -183,9 +183,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(369, 438);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 15);
+            this.label1.Size = new System.Drawing.Size(75, 15);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Zoom Moode";
+            this.label1.Text = "Loop Moode";
             // 
             // Form1
             // 

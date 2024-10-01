@@ -347,7 +347,7 @@ namespace MusicPlayer
             }
             */
 
-            
+
 
             Restart(musicstr);
 
@@ -548,6 +548,18 @@ namespace MusicPlayer
                 mx = e.X;
             }
 
+            if (loopADrag == true)
+            {
+                loopADrag = false;
+                customWaveViewer1.Refresh();
+            }
+
+            if (loopBDrag == true)
+            {
+                loopBDrag = false;
+                customWaveViewer1.Refresh();
+            }
+
             mouseDrag = false;
 
 
@@ -584,6 +596,12 @@ namespace MusicPlayer
         bool stopf = false;
         bool Scrollflg = false;
         bool mouseDrag = false;
+
+        bool loopberAflg = false;
+        bool loopADrag = false;
+
+        bool loopberBflg = false;
+        bool loopBDrag = false;
         int eX_Lborder = 0;
         int eX_Rborder = 0;
         private void customWaveViewer1_MouseMove(object sender, MouseEventArgs e)
@@ -603,9 +621,45 @@ namespace MusicPlayer
                 }
                 else
                 {
-
+                    //if (loopberAflg == true) return;
+                    //if (loopberBflg == true) return;
                     this.Cursor = System.Windows.Forms.Cursors.Arrow;
                     Scrollflg = false;
+                }
+
+
+                if (eX_Lborder < customWaveViewer1.loopAber && customWaveViewer1.loopAber < eX_Rborder)//loopber start
+                {
+                    if (eX_Lborder < currentSec.X - slideoffset && currentSec.X - slideoffset < eX_Rborder)
+                    {
+                        return;
+                    }
+                    this.Cursor = Cursors.Hand;
+                    loopberAflg = true;
+                }
+                else
+                {
+                    //if (Scrollflg == true) return;
+                    if (loopberBflg == true) return;
+                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
+                    loopberAflg = false;
+                }
+
+                if (eX_Lborder < customWaveViewer1.loopBber && customWaveViewer1.loopBber < eX_Rborder)//loopber end
+                {
+                    if (eX_Lborder < currentSec.X - slideoffset && currentSec.X - slideoffset < eX_Rborder)
+                    {
+                        return;
+                    }
+                    this.Cursor = Cursors.Hand;
+                    loopberBflg = true;
+                }
+                else
+                {
+                    if (Scrollflg == true) return;
+                    if (loopberAflg == true) return;
+                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
+                    loopberBflg = false;
                 }
             }
             else return;
@@ -621,14 +675,36 @@ namespace MusicPlayer
                 customWaveViewer1.Refresh();
 
             }
+
+
+            if (loopADrag == true) //loopber start
+            {
+                this.Cursor = System.Windows.Forms.Cursors.VSplit;
+
+                customWaveViewer1.loopAber = e.X;
+
+            }
+            //
+
+            if (loopBDrag == true) //loopber end
+            {
+                this.Cursor = System.Windows.Forms.Cursors.VSplit;
+
+                customWaveViewer1.loopBber = e.X;
+
+            }
+
+
         }
 
         private void customWaveViewer1_MouseDown(object sender, MouseEventArgs e)
         {
+            Point mpos = e.Location;
+
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
 
-                Point mpos = e.Location;
+
 
                 if (currentSec.X - slideoffset == mpos.X)
                 {
@@ -642,6 +718,15 @@ namespace MusicPlayer
                     mouseDrag = true;
                 }
 
+                if (loopberAflg == true)//loopber start
+                {
+                    loopADrag = true;
+                }
+
+                if (loopberBflg == true)//loopber end
+                {
+                    loopBDrag = true;
+                }
             }
 
 
@@ -661,22 +746,22 @@ namespace MusicPlayer
             }
         }
 
-        public bool roopflg = false;
+
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            
 
-            if(roopflg)
+
+            if (customWaveViewer1.roopflg)
             {
-                pictureBox1.BackgroundImage= System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\OFF.png");
-                label1.Text = "Zoom Moode";
-                roopflg = false;
+                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\OFF.png");
+                customWaveViewer1.Refresh();
+                customWaveViewer1.roopflg = false;
             }
             else
             {
                 pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\ON.png");
-                label1.Text = "Loop Moode";
-                roopflg = true;
+                customWaveViewer1.Refresh();
+                customWaveViewer1.roopflg = true;
             }
         }
     }
