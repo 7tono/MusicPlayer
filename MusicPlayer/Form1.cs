@@ -544,26 +544,47 @@ namespace MusicPlayer
 
             if (mouseDrag == true)
             {
+                if (currentSec.X < 0) currentSec.X = 0;
+                if (currentSec.X > 1200) currentSec.X = 1199;
                 stopf = true;
+                customWaveViewer1.Refresh();
                 mx = e.X;
             }
 
             if (loopADrag == true)
             {
+                if (customWaveViewer1.loopAber < 0) 
+                    customWaveViewer1.loopAber = 0;
+                if (customWaveViewer1.loopAber > 1200) customWaveViewer1.loopAber = 1199;
                 loopADrag = false;
                 customWaveViewer1.Refresh();
             }
 
             if (loopBDrag == true)
             {
+                if (customWaveViewer1.loopBber < 0) customWaveViewer1.loopAber = 0;
+                if (customWaveViewer1.loopBber > 1200) customWaveViewer1.loopAber = 1199;
                 loopBDrag = false;
                 customWaveViewer1.Refresh();
             }
 
             mouseDrag = false;
 
+            if(customWaveViewer1.loopAber > customWaveViewer1.loopBber)
+            {
+                double ioopbertnp = customWaveViewer1.loopAber;
+                customWaveViewer1.loopAber = customWaveViewer1.loopBber;
+                customWaveViewer1.loopBber = ioopbertnp;
+                //customWaveViewer1.Refresh();
+            }
 
-            if (e.X < 0) mx = 0;
+            if (customWaveViewer1.loopAber == customWaveViewer1.loopBber)
+            {
+                customWaveViewer1.loopBber += 5;
+            }
+
+
+                if (e.X < 0) mx = 0;
 
             if (customWaveViewer1.WaveStream != null && afr != null)
             {
@@ -607,6 +628,7 @@ namespace MusicPlayer
         private void customWaveViewer1_MouseMove(object sender, MouseEventArgs e)
         {
 
+            this.Cursor = System.Windows.Forms.Cursors.Arrow;
 
             if (customWaveViewer1.WaveStream != null)
             {
@@ -616,14 +638,11 @@ namespace MusicPlayer
                 if (eX_Lborder < currentSec.X - slideoffset && currentSec.X - slideoffset < eX_Rborder)
                 {
 
-                    this.Cursor = Cursors.Hand;
+
                     Scrollflg = true;
                 }
                 else
                 {
-                    //if (loopberAflg == true) return;
-                    //if (loopberBflg == true) return;
-                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
                     Scrollflg = false;
                 }
 
@@ -634,14 +653,11 @@ namespace MusicPlayer
                     {
                         return;
                     }
-                    this.Cursor = Cursors.Hand;
+
                     loopberAflg = true;
                 }
                 else
                 {
-                    //if (Scrollflg == true) return;
-                    if (loopberBflg == true) return;
-                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
                     loopberAflg = false;
                 }
 
@@ -651,16 +667,20 @@ namespace MusicPlayer
                     {
                         return;
                     }
-                    this.Cursor = Cursors.Hand;
+
                     loopberBflg = true;
                 }
                 else
                 {
-                    if (Scrollflg == true) return;
-                    if (loopberAflg == true) return;
-                    this.Cursor = System.Windows.Forms.Cursors.Arrow;
                     loopberBflg = false;
                 }
+
+
+                if (Scrollflg == true || loopberAflg == true || loopberBflg == true)
+                {
+                    this.Cursor = Cursors.Hand;
+                }
+
             }
             else return;
 
@@ -672,7 +692,9 @@ namespace MusicPlayer
 
                 customWaveViewer1.setpoint(e.X - slideoffset);
                 currentSec.X = e.X;
-                customWaveViewer1.Refresh();
+                if (e.X > 1200) currentSec.X = 1199;
+                else if (e.X < 0) currentSec.X = 1;
+                else customWaveViewer1.Refresh();
 
             }
 
@@ -681,16 +703,19 @@ namespace MusicPlayer
             {
                 this.Cursor = System.Windows.Forms.Cursors.VSplit;
 
-                customWaveViewer1.loopAber = e.X;
+                if (e.X > 1200) customWaveViewer1.loopAber = 1199;
+                else if (e.X < 0) customWaveViewer1.loopAber = 1;
+                else customWaveViewer1.loopAber = e.X;
 
             }
-            //
+
 
             if (loopBDrag == true) //loopber end
             {
                 this.Cursor = System.Windows.Forms.Cursors.VSplit;
-
-                customWaveViewer1.loopBber = e.X;
+                if (e.X > 1200) customWaveViewer1.loopBber = 1199;
+                else if (e.X < 0) customWaveViewer1.loopBber = 1;
+                else customWaveViewer1.loopBber = e.X;
 
             }
 
