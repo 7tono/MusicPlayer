@@ -50,6 +50,8 @@ namespace MusicPlayer
         string filePatho = string.Empty;
         string filePathf = string.Empty;
 
+        long mujicnum = 0;
+
         WaveOutEvent outputDevice = new WaveOutEvent();
         private void button1_Click(object sender, EventArgs e)
         {
@@ -67,9 +69,11 @@ namespace MusicPlayer
 
                 readfile(filePath, filePathn);
                 mx = 0;
-
+                
             }
 
+
+          
         }
 
         string filePath_replay;
@@ -137,6 +141,11 @@ namespace MusicPlayer
 
 
             dataGridView1.Rows.Add(new string[] { Column_num + "", filePath, filePath_replay });
+            //ここでセレクト呼んでやればいいのでは？　oooooooo
+
+            int mujicnum = dataGridView1.RowCount - 2;
+
+            dataGridView1.CurrentCell = dataGridView1[0, mujicnum];
 
 
             customWaveViewer1.WaveStream = new WaveFileReader(filePathf);
@@ -163,7 +172,7 @@ namespace MusicPlayer
 
         bool Playflg = false;
         bool onetime = true;
-
+        bool stertflg = true;
         double startpos = 0;
 
         public void PlayPauseButton_Click(object sender, EventArgs e)
@@ -197,12 +206,13 @@ namespace MusicPlayer
                     afr = new AudioFileReader(dbselect);
 
                     outputDevice.Init(afr);
-                    //mx = 0;
                     onetime = false;
                 }
 
 
                 PlayPauseButton.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\source\repos\MusicPlayer\pose.png");
+
+
 
                 outputDevice.Play();
                 timer1.Enabled = true;
@@ -213,10 +223,6 @@ namespace MusicPlayer
                     mx = 0;
 
                 }
-
-
-
-
 
 
             }
@@ -327,7 +333,9 @@ namespace MusicPlayer
             try
             {
                 musicstr = dataGridView1.Rows[i].Cells[2].Value.ToString(); //ここのエラーは対策済み
-                PlayPauseButton_Click(sender, e);
+                //PlayPauseButton_Click(sender, e);
+
+
             }
             catch
             {
@@ -335,22 +343,11 @@ namespace MusicPlayer
             }
 
 
-            /*
-            if(customWaveViewer1.zoomflg)
-            {
-                customWaveViewer1.Zoom(1, 1200);
-            }
-            else
-            {
-                customWaveViewer1.Zoom(1, 1200);
-                customWaveViewer1.Zoom(1, 1200);
-            }
-            */
-
-
 
             Restart(musicstr);
-
+            if (Playflg) outputDevice.Play();
+            // dataGridView1.CurrentCell = dataGridView1[1, 0];
+            
         }
 
         public Graphics g = null;
@@ -527,6 +524,17 @@ namespace MusicPlayer
                     customWaveViewer1.Refresh();
                 }
             }
+
+
+
+
+            if (customWaveViewer1.loopBber == currentSec.X)
+            {
+                double PPP = customWaveViewer1.loopAber / 12;
+                double PPPP = afr.Length * PPP;
+                double PPPPP = PPPP / 100;
+                afr.Position = (long)PPPPP;
+            }
         }
 
 
@@ -553,10 +561,11 @@ namespace MusicPlayer
 
             if (loopADrag == true)
             {
-                if (customWaveViewer1.loopAber < 0) 
+                if (customWaveViewer1.loopAber < 0)
                     customWaveViewer1.loopAber = 0;
                 if (customWaveViewer1.loopAber > 1200) customWaveViewer1.loopAber = 1199;
                 loopADrag = false;
+                mx = e.X;
                 customWaveViewer1.Refresh();
             }
 
@@ -570,11 +579,11 @@ namespace MusicPlayer
 
             mouseDrag = false;
 
-            if(customWaveViewer1.loopAber > customWaveViewer1.loopBber)
+            if (customWaveViewer1.loopAber > customWaveViewer1.loopBber)
             {
-                double ioopbertnp = customWaveViewer1.loopAber;
+                double loopbertnp = customWaveViewer1.loopAber;
                 customWaveViewer1.loopAber = customWaveViewer1.loopBber;
-                customWaveViewer1.loopBber = ioopbertnp;
+                customWaveViewer1.loopBber = loopbertnp;
                 //customWaveViewer1.Refresh();
             }
 
@@ -584,7 +593,8 @@ namespace MusicPlayer
             }
 
 
-                if (e.X < 0) mx = 0;
+
+            if (e.X < 0) mx = 0;
 
             if (customWaveViewer1.WaveStream != null && afr != null)
             {
@@ -776,18 +786,21 @@ namespace MusicPlayer
         {
 
 
-            if (customWaveViewer1.roopflg)
+            if (!customWaveViewer1.roopflg)
             {
-                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\OFF.png");
+                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\swich on.png");
+                
+                customWaveViewer1.roopflg = true;
                 customWaveViewer1.Refresh();
-                customWaveViewer1.roopflg = false;
             }
             else
             {
-                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\ON.png");
+                pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\swich off.png");
+                
+                customWaveViewer1.roopflg = false;
                 customWaveViewer1.Refresh();
-                customWaveViewer1.roopflg = true;
             }
+            this.Text = customWaveViewer1.roopflg + "";
         }
     }
 }
