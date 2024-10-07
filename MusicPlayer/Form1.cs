@@ -501,7 +501,7 @@ namespace MusicPlayer
 
             if (customWaveViewer1.zoomflg) // 
             {
-                if (Weaveview_pos >= 1200)
+                if (Weaveview_pos >= 1200)//zoom中の見てるグラフの移動
                 {
 
                     // 書き始めにttlong（zoom後の画面の範囲）を足す。
@@ -530,10 +530,19 @@ namespace MusicPlayer
 
             if (customWaveViewer1.loopBber == currentSec.X)
             {
-                double PPP = customWaveViewer1.loopAber / 12;
-                double PPPP = afr.Length * PPP;
-                double PPPPP = PPPP / 100;
-                afr.Position = (long)PPPPP;
+                if (customWaveViewer1.zoomflg)
+                {
+                    double QQQ = customWaveViewer1.loopAber / customWaveViewer1.SamplesPerPixel;
+                    afr.Position = (long)QQQ;
+                }
+                else
+                {
+                    double PPP = customWaveViewer1.loopAber / 12;
+                    double PPPP = afr.Length * PPP;
+                    double PPPPP = PPPP / 100;
+                    afr.Position = (long)PPPPP;
+                }
+                
             }
         }
 
@@ -565,7 +574,20 @@ namespace MusicPlayer
                     customWaveViewer1.loopAber = 0;
                 if (customWaveViewer1.loopAber > 1200) customWaveViewer1.loopAber = 1199;
                 loopADrag = false;
-                mx = e.X;
+
+                if (customWaveViewer1.zoomflg)
+                {
+                    double QQQ = afr.Length / ((customWaveViewer1.loopAber / (customWaveViewer1.samplesPerPixel + customWaveViewer1.leftSample)) /1200);
+                    //mx = e.X;
+                    afr.Position = (long)QQQ;　　//10/07 赤バーの処理
+                    customWaveViewer1.Refresh();
+
+                }
+                else
+                {
+                    mx = e.X;
+                }
+                
                 customWaveViewer1.Refresh();
             }
 

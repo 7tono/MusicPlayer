@@ -135,6 +135,9 @@ namespace MusicPlayer
         double Mgn;
         double antMgn = 1;
 
+        public int leftSample;
+        public int rightSample;
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
 
@@ -150,8 +153,8 @@ namespace MusicPlayer
                 if (mousePos.X == -1) return;
                 DrawVerticalLine(mousePos.X);
 
-                int leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
-                int rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
+                 leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
+                 rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
                 /////ooo
                 Zoom(leftSample, rightSample);
                 //
