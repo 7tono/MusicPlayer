@@ -49,35 +49,40 @@ namespace MusicPlayer
 
 
 
-        public void Zoom(int leftSample, int rightSample)
+        public void Zoom(int leftSample, int rightSample,bool flg)
         {
             Form1 ff = (Form1)(this.TopLevelControl);
             double SX = startPos.X;
             double Musicracio = 1200 / SX;
             double trackracio = 100 / Musicracio;
 
-
-            if (zoomflg) //Zoomの解除
+            if (roopflg == false)
             {
-                this.FitToScreen();
-                zoomflg = false;
-                ff.trackBar2.Value = 0;
-                //ff.tts.X = 1;
-                //ff.tte.X = 1;
+                if (zoomflg && flg == true)
+                {
 
-                startPos.X = 0;
-                endPos.X = 0;
-            }
-            else //Zoom
-            {
-                this.startPosition = leftSample * bytesPerSample; // [byte]
-                this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
-                zoomflg = true;
-                sabun = rightSample - leftSample;
-                rightSample_old = rightSample;
-                ff.trackBar2.Value = (int)trackracio;
+                    this.FitToScreen();//Zoomの解除
+                    zoomflg = false;
+                    ff.trackBar2.Value = 0;
+                    //ff.tts.X = 1;
+                    //ff.tte.X = 1;
 
+                    startPos.X = 0;
+                    endPos.X = 0;
+
+                }
+                else //Zoom
+                {
+                    this.startPosition = leftSample * bytesPerSample; // [byte]
+                    this.SamplesPerPixel = (rightSample - leftSample) / this.Width; // [sample/pixel]
+                    zoomflg = true;
+                    sabun = rightSample - leftSample;
+                    rightSample_old = rightSample;
+                    ff.trackBar2.Value = (int)trackracio;
+
+                }
             }
+            
         }
 
         #region Mouse
@@ -156,7 +161,7 @@ namespace MusicPlayer
                  leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
                  rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
                 /////ooo
-                Zoom(leftSample, rightSample);
+                Zoom(leftSample, rightSample,true);
                 //
 
                 MoveDistance = (double)(endPos.X - startPos.X);  // マウスの移動距離　= マウスアップした位置 - マウスダウンした位置

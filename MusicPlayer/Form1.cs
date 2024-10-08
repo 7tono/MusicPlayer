@@ -69,11 +69,11 @@ namespace MusicPlayer
 
                 readfile(filePath, filePathn);
                 mx = 0;
-                
+
             }
 
 
-          
+
         }
 
         string filePath_replay;
@@ -347,7 +347,7 @@ namespace MusicPlayer
             Restart(musicstr);
             if (Playflg) outputDevice.Play();
             // dataGridView1.CurrentCell = dataGridView1[1, 0];
-            
+
         }
 
         public Graphics g = null;
@@ -518,7 +518,7 @@ namespace MusicPlayer
                     int leftSample = customWaveViewer1.rightSample_old;
                     int rightSample = customWaveViewer1.rightSample_old + customWaveViewer1.sabun;
 
-                    customWaveViewer1.Zoom(leftSample, rightSample);
+                    customWaveViewer1.Zoom(leftSample, rightSample,false);
                     customWaveViewer1.setpoint(0);
                     Weaveview_pos = 0;
                     customWaveViewer1.Refresh();
@@ -542,7 +542,7 @@ namespace MusicPlayer
                     double PPPPP = PPPP / 100;
                     afr.Position = (long)PPPPP;
                 }
-                
+
             }
         }
 
@@ -575,19 +575,11 @@ namespace MusicPlayer
                 if (customWaveViewer1.loopAber > 1200) customWaveViewer1.loopAber = 1199;
                 loopADrag = false;
 
-                if (customWaveViewer1.zoomflg)
-                {
-                    double QQQ = afr.Length / ((customWaveViewer1.loopAber / (customWaveViewer1.samplesPerPixel + customWaveViewer1.leftSample)) /1200);
-                    //mx = e.X;
-                    afr.Position = (long)QQQ;　　//10/07 赤バーの処理
-                    customWaveViewer1.Refresh();
-
-                }
-                else
-                {
-                    mx = e.X;
-                }
                 
+                
+                    mx = e.X;
+                
+
                 customWaveViewer1.Refresh();
             }
 
@@ -599,7 +591,7 @@ namespace MusicPlayer
                 customWaveViewer1.Refresh();
             }
 
-            mouseDrag = false;
+            
 
             if (customWaveViewer1.loopAber > customWaveViewer1.loopBber)
             {
@@ -618,32 +610,37 @@ namespace MusicPlayer
 
             if (e.X < 0) mx = 0;
 
-            if (customWaveViewer1.WaveStream != null && afr != null)
+
+            if (mouseDrag)
             {
 
 
-
-                double onep = 1200 / 100; //Wiew画面の１％の長さ
-                mouse_persent = mx / onep;//マウスは何パーセントの位置にいる？
-                viewp = (long)afr.Length * (long)mouse_persent;//パーセントを掛ける
-                viewp = viewp / 100;//パーセントでの位置に直す
+                if (customWaveViewer1.WaveStream != null && afr != null)
+                {
 
 
-                currentSec.X = mx;
-
-                Debug.WriteLine("→→→→" + viewp);
-                afr.Position = viewp;
-
-
-
-                customWaveViewer1.setpoint((int)mx - slideoffset);
-                //trackBar2.Value = customWaveViewer1.rightSample_old;
-                customWaveViewer1.Refresh();
+                    double onep = 1200 / 100; //Wiew画面の１％の長さ
+                    mouse_persent = mx / onep;//マウスは何パーセントの位置にいる？
+                    viewp = (long)afr.Length * (long)mouse_persent;//パーセントを掛ける
+                    viewp = viewp / 100;//パーセントでの位置に直す
 
 
+                    currentSec.X = mx;
+
+                    Debug.WriteLine("→→→→" + viewp);
+                    afr.Position = viewp;
+
+
+
+                    customWaveViewer1.setpoint((int)mx - slideoffset);
+                    //trackBar2.Value = customWaveViewer1.rightSample_old;
+                    customWaveViewer1.Refresh();
+
+
+                }
+                mouseDrag = false;
             }
-
-
+            
         }
 
         bool stopf = false;
@@ -722,7 +719,7 @@ namespace MusicPlayer
             {
                 this.Cursor = System.Windows.Forms.Cursors.VSplit;
 
-                customWaveViewer1.setpoint(e.X - slideoffset);
+                customWaveViewer1.setpoint(e.X - slideoffset);//- slideoffset
                 currentSec.X = e.X;
                 if (e.X > 1200) currentSec.X = 1199;
                 else if (e.X < 0) currentSec.X = 1;
@@ -811,14 +808,22 @@ namespace MusicPlayer
             if (!customWaveViewer1.roopflg)
             {
                 pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\swich on.png");
-                
+
+
+                if(customWaveViewer1.zoomflg)
+                {
+                    StopButton_Click(sender, e);
+                    customWaveViewer1.FitToScreen();
+                }
                 customWaveViewer1.roopflg = true;
+
+                
                 customWaveViewer1.Refresh();
             }
             else
             {
                 pictureBox1.BackgroundImage = System.Drawing.Image.FromFile(@"C:\Users\user\\source\repos\MusicPlayer\swich off.png");
-                
+
                 customWaveViewer1.roopflg = false;
                 customWaveViewer1.Refresh();
             }
