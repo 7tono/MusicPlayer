@@ -530,18 +530,13 @@ namespace MusicPlayer
 
             if (customWaveViewer1.loopBber == currentSec.X)
             {
-                if (customWaveViewer1.zoomflg)
-                {
-                    double QQQ = customWaveViewer1.loopAber / customWaveViewer1.SamplesPerPixel;
-                    afr.Position = (long)QQQ;
-                }
-                else
-                {
+                
+                
                     double PPP = customWaveViewer1.loopAber / 12;
                     double PPPP = afr.Length * PPP;
                     double PPPPP = PPPP / 100;
                     afr.Position = (long)PPPPP;
-                }
+                
 
             }
         }
@@ -657,6 +652,7 @@ namespace MusicPlayer
         private void customWaveViewer1_MouseMove(object sender, MouseEventArgs e)
         {
 
+           
             this.Cursor = System.Windows.Forms.Cursors.Arrow;
 
             if (customWaveViewer1.WaveStream != null)
@@ -723,7 +719,7 @@ namespace MusicPlayer
                 currentSec.X = e.X;
                 if (e.X > 1200) currentSec.X = 1199;
                 else if (e.X < 0) currentSec.X = 1;
-                else customWaveViewer1.Refresh();
+                //else customWaveViewer1.Refresh();
 
             }
 
@@ -748,7 +744,7 @@ namespace MusicPlayer
 
             }
 
-
+            customWaveViewer1.Refresh();
         }
 
         private void customWaveViewer1_MouseDown(object sender, MouseEventArgs e)

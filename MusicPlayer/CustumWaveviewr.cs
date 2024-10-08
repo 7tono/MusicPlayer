@@ -56,7 +56,7 @@ namespace MusicPlayer
             double Musicracio = 1200 / SX;
             double trackracio = 100 / Musicracio;
 
-            if (roopflg == false)
+           // if (roopflg == false)
             {
                 if (zoomflg && flg == true)
                 {
@@ -92,8 +92,10 @@ namespace MusicPlayer
         protected override void OnMouseDown(MouseEventArgs e)
         {
 
+          
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
+                if (roopflg) return;
                 startPos = e.Location;
                 mousePos = new Point(-1, 1);
                 mouseDrag = true;
@@ -113,6 +115,7 @@ namespace MusicPlayer
         protected override void OnMouseMove(MouseEventArgs e)
         {
 
+            //if (roopflg) return;
             if (mouseDrag)
             {
                 DrawVerticalLine(e.X); // マウス位置にライン描画
@@ -146,10 +149,12 @@ namespace MusicPlayer
         protected override void OnMouseUp(MouseEventArgs e)
         {
 
-
+            //if (roopflg) return;
             if (mouseDrag && e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                endPos = e.Location;////oooooo
+                if (roopflg == false)
+                {
+                    endPos = e.Location;////oooooo
 
 
                 mouseDrag = false;
@@ -157,16 +162,18 @@ namespace MusicPlayer
 
                 if (mousePos.X == -1) return;
                 DrawVerticalLine(mousePos.X);
-
-                 leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
+               
+                    leftSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Min(startPos.X, mousePos.X));
                  rightSample = (int)(StartPosition / bytesPerSample + SamplesPerPixel * Math.Max(startPos.X, mousePos.X));
                 /////ooo
-                Zoom(leftSample, rightSample,true);
-                //
+                
+                    Zoom(leftSample, rightSample, true);
+                
 
                 MoveDistance = (double)(endPos.X - startPos.X);  // マウスの移動距離　= マウスアップした位置 - マウスダウンした位置
                 Mgn = 1200 / MoveDistance;　　           　　　　 //拡大倍率　= 1200(WaveViewerの横幅) / マウスの移動距離
                 antMgn = MoveDistance / 1200;
+                }
 
             }
             else if (e.Button == MouseButtons.Middle)
